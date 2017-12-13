@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ "$1" != 'origin' ]
+then
+	git push origin -f --mirror --no-verify
+fi
+if [ "$1" != 'mirror1' ]
+then
+	git push mirror1 -f --mirror --no-verify
+fi
