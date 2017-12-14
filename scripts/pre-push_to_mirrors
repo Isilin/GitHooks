@@ -1,14 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
-if [ "$1" != 'origin' ]
-then
-	echo 'push origin'
-#	git push origin -f --mirror --no-verify
-fi
-if [ "$1" != 'mirror1' ]
-then
-	echo 'push mirror1'
-#	git push mirror1 -f --mirror --no-verify
-fi
+remotes=( $(git remote) )
 
-echo "push $1"
+for it in "${remotes[@]}"
+do
+	if [ "$1" != "$it" ]
+	then
+		branch=()
+		while read local_ref local_sha remote_ref remote_sha
+		do
+			branch+=( $(echo $remote_ref | sed -e 's,.*/\(.*\),\1,') )
+			git push "$it ${branch[*]}" -f --mirror --no-verify
+		done
+	fi
+done
